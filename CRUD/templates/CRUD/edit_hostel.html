@@ -1,0 +1,136 @@
+{% extends 'main.html'%}
+{% load crispy_forms_tags %}
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+  {% block subheader %}
+  <h1><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit Hostel <small>Manage Your Site</small>
+  </h1>
+  {% endblock %}
+  {% block breadcrumbs %}
+  <li><a href="{%url 'CRUD:add-hostel'%}">Dashboard</a></li>
+  <li class="active">Edit Hostel </li>
+  {% endblock %}
+  <section id="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          {% block overview %}
+          {% endblock %}
+          {% block latestUser %}
+          {% endblock %}
+
+          {% block body%}
+          <!--edit view -->
+          <div class="col-md-13">
+            <div class="panel panel-default">
+              <div class="panel-heading main-color-bg">
+                <h3 class="panel-title">Hostels</h3>
+              </div>
+              <div class="panel-body"> 
+                <form method="POST" enctype="multipart/form-data">
+
+                  {% csrf_token %}
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-3">
+                        {{ form.Hostel_name|as_crispy_field }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.Hostel_Address|as_crispy_field}}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        {{ form.Hostel_Ph_No|as_crispy_field }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.Hostel_Mobile_No|as_crispy_field }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        {{ form.Hostel_Price|as_crispy_field }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.Hostel_Estd|as_crispy_field }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        {{ form.Hostel_long|as_crispy_field }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.Hostel_lat|as_crispy_field }}
+                      </div>
+                   
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                           {{ form.Hostel_type|as_crispy_field }}
+                          <h4><strong>Facilities</strong></h4>
+                          <table class="table" style={border:none;}>
+                            <tr>
+                              <td>{{ form.wifi|as_crispy_field }}</td>
+                              <td>{{ form.studyRoom|as_crispy_field }}</td>
+                              <td>{{ form.singleRoom|as_crispy_field }}</td>
+                              <td>{{ form.dormitory|as_crispy_field }}</td>
+                              <td>{{ form.lodging|as_crispy_field }}</td>
+                              <td>{{ form.laundary|as_crispy_field }}</td>                            
+                              <td>{{ form.medicalFacility|as_crispy_field }}</td>
+                            </tr>
+                          </table>
+                        </div>
+                        </div>
+                    <div class="row">
+
+                      <div class="col-md-3">
+                        {% for e in img %}
+
+                        <tr>
+                          <td><img src="{{e.image.url}}" width="70px"></td>
+                        </tr>
+                        {% endfor %}
+                      </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-primary my-2 my-sm-0">Save</button>
+                </form>
+                {{ ' '}}
+                <form action="{%url 'CRUD:delete-single-hostel' id=del%}" method="POST">
+                  <td>
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                    </table>
+                  </td>
+                </form>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+
+  {%endblock%}
+  <!-- Modals -->
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>

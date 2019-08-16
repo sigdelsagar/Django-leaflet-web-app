@@ -1,0 +1,333 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaflet GeoJSON Example</title>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.24/jquery-ui.min.js"></script>
+    <script
+      src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+      integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+      crossorigin=""
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  
+    <!-- <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+    /> -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+    /> -->
+    <!-- <link
+      rel="stylesheet"
+      href="http://www.liedman.net/leaflet-routing-machine/dist/leaflet-routing-machine.css"
+    />
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script> -->
+    <!-- <script src="http://www.liedman.net/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script> -->
+    
+    <!-- <link rel="stylesheet" href="http://www.liedman.net/leaflet-routing-machine/dist/leaflet-routing-machine.css" /> -->
+    <link rel="stylesheet" href="{% static 'Routing/leaflet-routing-machine.css'%}" />
+    <script src="{% static 'Routing/leaflet-routing-machine.js'%}"></script>
+    
+
+
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/graphhopper-js-api-client/dist/graphhopper-client.js"></script> -->
+    <script src="{% static 'js/Control.Geocoder.js'%}"></script>
+    <!-- <script src="{% static 'js/index.js'%}"></script> -->
+    <!-- <link rel="stylesheet" href="{% static 'css/index.css'%}" /> -->
+     
+    <!-- Search box -->
+    <script src="{% static 'js/leaflet.customsearchbox.min.js'%}"></script>
+    <link href="{% static 'css/searchbox.min.css'%}" rel="stylesheet" />
+  </head>
+
+  <body style="top:0;left:0; right:0;bottom:0; position:absolute">
+
+   
+
+    <div id="map" style="width:100%;height:100%"></div>
+     <div id="user-latitude"></div>
+    <div id="user-longitude"></div>
+
+    <script>
+// var user_lat=0.0;
+// var user_long=0.0;
+ var mymap = L.map('map').setView([27.68333333,85.33694444 ], zoom_start = 12);
+         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29iZXkiLCJhIjoiY2p2bDlsOGluMHRuOTQ5cWxhd2U2YzNxdyJ9.dWDzlfG7d03FvSFWGKOZJA', {
+                        attribution: '',
+                        maxZoom: 18,
+                        id: 'mapbox.streets',
+                        accessToken: 'your.mapbox.access.token'
+                       }).addTo(mymap);
+        mymap.zoomControl.setPosition("topright");
+        // user's own locaiton----------------------------
+        var myIcon = L.icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+
+          iconSize: [25, 41],
+          iconAnchor: [12.5, 41],
+          popupAnchor: [0, -41]
+        });
+         var startIcon = L.icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+
+          iconSize: [25, 41],
+          iconAnchor: [12.5, 41],
+          popupAnchor: [0, -41]
+        });
+          var destinationIcon = L.icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+
+          iconSize: [25, 41],
+          iconAnchor: [12.5, 41],
+          popupAnchor: [0, -41]
+        });
+       
+       //------------------------------------------------
+      $(document).ready(function() {
+        var searchboxControl = createSearchboxControl();
+        var control = new searchboxControl({
+          sidebarTitleText: "Menu",
+          sidebarMenuItems: {
+            Items: [
+              {
+                type: "link",
+                name: "Add Hostel",
+                href: "{% url 'CRUD:insert' %}",
+                //icon: "icon-local-carwash"
+              },
+              
+              {
+                type: "button",
+                name: "Nearest Hostel",
+               onclick:"button_click()",
+                //icon: "icon-local-dining"
+              },
+               {
+                type: "link",
+                name: "Hostel View",
+                 href: "{% url 'CRUD:total-hostel' %}",
+                //icon: "icon-local-dining"
+              },
+              {
+                type: "link",
+                name: "LogOut",
+                href: "{% url 'CRUD:logout' %}",
+                //icon: "icon-bike"
+              },
+             
+            ]
+          }
+        });
+
+        control._searchfunctionCallBack = function(searchkeywords) {
+          if (!searchkeywords) {
+            searchkeywords = "The search call back is clicked !!";
+          }
+          //alert(searchkeywords);
+          var somethin=window.location.href="http://127.0.0.1:8000/hostel/search-hostel?name="+searchkeywords+"";
+          console.log(somthin);
+        };
+
+        var data = {{ json| safe }};
+        
+        if (data !=null){
+          
+              var count = Object.keys(data).length;
+                      for (i = 0; i < count; i++) {
+                                 var lat = data[i]['fields'].Hostel_lat;
+                            console.log(lat)
+                                 var long = data[i]['fields'].Hostel_long;
+                                 var name = data[i]['fields'].Hostel_name;
+                                 var addr = data[i]['fields'].Hostel_Address;
+                        var price = data[i]['fields'].Hostel_Price;
+                        var phno = data[i]['fields'].Hostel_Ph_No;
+                        var mobno = data[i]['fields'].Hostel_Mobile_No;
+                         
+                        var marker=L.marker([lat,long ], {icon: destinationIcon}).addTo(mymap);
+                                  //console.log(name);
+                                 // var popup = L.popup().setLatLng([lat, long]).setContent(name).openOn(mymap);
+var show=marker.bindPopup
+(name+"<br />"+'<a  href=http://127.0.0.1:8000/hostel/direction/'+long+'/'+lat+'/'+'>direction</a>').closePopup(); 
+                marker.bindTooltip("Name:"+name+"<br />Address:"+addr+"<br/>Price:Rs"+price+
+            "<br/>Contacts:"+phno+",<br/>  "+mobno).closeTooltip();
+                     marker.on('mousehover',function(e){                    
+                      this.openPopup();
+              //this.closeTooltip();
+                     });
+                           marker.on('click', function (e) {
+                       });
+
+                             }
+                             console.log("true");
+
+        }
+// alert("here");
+        mymap.addControl(control);
+    //     var cont=L.Routing.control({
+    //                    	 	waypoints: [
+    //                    	 		L.latLng(27.71, 85.32),
+    //                    	 		L.latLng(27.69, 85.30)
+    //                    	 	],
+    //                       router: L.Routing.osrmv1({
+    //     serviceUrl: 'http://my-osrm/route/v1'
+    // })
+    //                       }).addTo(mymap);
+    //                   cont.hide();
+	
+//   var ghRouting = new GraphHopper.Routing({
+//       key: "2d58e52c-f0d0-4063-83ed-65c8c748d953",
+//       vehicle: "car",
+//       elevation: false
+//     });
+
+//     ghRouting.addPoint(new GHInput(47.400905, 8.534317));
+//     ghRouting.addPoint(new GHInput(47.394108, 8.538265));
+
+//    var routingControl = L.Routing.control({
+//   waypoints: [
+//     L.latLng(27.71, 85.32),
+//     L.latLng(27.69, 85.30)
+//   ],                  
+//   //geocoder: L.Control.Geocoder.nominatim(),
+//   router: L.Routing.graphHopper('2d58e52c-f0d0-4063-83ed-65c8c748d953'),
+//   routeWhileDragging: false
+// }).addTo(mymap);
+//     ghRouting.doRequest()
+//       .then(function(json) {
+      
+//         console.log('working');
+//       })
+//       .catch(function(err) {
+//         console.error(err.message);
+//       });
+
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+ L.Control.Scale=L.Control.extend({  
+               onAdd: function(map) {
+
+                    var card = L.DomUtil.create("div");
+                    card.innerHTML=`<div class="leaflet-control-layers leaflet-control-layers-expanded">
+                      
+                        <div class="leaflet-control-layers-overlays" style="height:15px;width:13px;" id="command"> 
+                        <img src="{% static 'css/image/target.jpg'%}" style="display: block; margin-left: auto;margin-right: auto;" alt="Italian Trulli">
+                         </div>
+                      
+                    </div>`; 
+                    card.onclick=function(){  
+                    mymap.setView([position.coords.latitude,position.coords.longitude ],zoomstart=16);                                    
+                     L.marker([position.coords.latitude,position.coords.longitude ], {icon: myIcon}).addTo(mymap);
+                     
+                    }
+                    return card;
+                    
+                }
+              });
+            L.control.scale = function (options) {
+              return new L.Control.Scale(options);
+            };
+            L.control.scale({position: 'topright'}).addTo(mymap);
+//----------------------------------------------------------------------------//
+//working mapbox code
+L.marker([position.coords.latitude,position.coords.longitude ], {icon: myIcon}).addTo(mymap);
+var current=window.location.pathname.split('/').slice(0, -1)
+var h_lat=current[3]    //url value
+console.log(h_lat);
+var h_long=current[4]   //url value
+console.log(h_long)
+user_long=position.coords.longitude;
+user_lat=position.coords.latitude;
+console.log(user_long);
+var start=0.0;
+
+//L.marker([position.coords.latitude,position.coords.longitude ], {icon: myIcon}).addTo(mymap);
+var control = L.Routing.control({
+  waypoints: [
+    
+     start=L.latLng(user_lat, user_long),       //path create 
+      L.latLng(h_long, h_lat)
+   
+  ],
+  geocoder: L.Control.Geocoder.nominatim(),
+  routeWhileDragging: true,
+  reverseWaypoints: true,
+  // showAlternatives: true,
+
+  LineOptions: {
+     styles: [
+     {color: 'black', opacity: 0.15, weight: 9},
+     {color: 'white', opacity: 0.8, weight: 6},
+        {color: 'blue', opacity: 0.5, weight: 2}
+     ] 
+  },
+  createMarker: function (i, start, n){
+    var marker_icon = null
+    if (i == 0) {
+        // This is the first marker, indicating start
+        marker_icon = startIcon
+    } else if (i == n -1) {
+        //This is the last marker indicating destination
+        marker_icon =destinationIcon
+    }
+    var marker = L.marker (start.latLng, {
+                draggable: true,
+                bounceOnAdd: false,
+                bounceOnAddOptions: {
+                    duration: 1000,
+                    height: 800, 
+                    function(){
+                        (bindPopup(myPopup).openOn(map))
+                    }
+                },
+                icon: marker_icon
+    })
+    return marker
+  },
+  router: L.Routing.mapbox('pk.eyJ1Ijoia29iZXkiLCJhIjoiY2p2bDlsOGluMHRuOTQ5cWxhd2U2YzNxdyJ9.dWDzlfG7d03FvSFWGKOZJA')
+}).addTo(mymap);
+control.hide();
+ });
+//working mapbox code
+
+// extending leaflet control
+// --------------------Target button-----------------------------------------//
+
+
+
+
+              
+});
+function button_click(){
+     navigator.geolocation.getCurrentPosition(function(position) {
+    var  user_long=position.coords.longitude;
+ var user_lat=position.coords.latitude;
+    window.location.href="http://127.0.0.1:8000/hostel/nearest/"+user_long+"/"+user_lat;
+
+  });
+}
+      
+   
+
+
+
+    </script>
+    <p id="href"></p>
+  </body>
+</html>

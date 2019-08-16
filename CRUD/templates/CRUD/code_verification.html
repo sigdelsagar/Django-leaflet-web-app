@@ -1,0 +1,87 @@
+
+</html>
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verification message</title>
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{% static 'css/style.css'%}" rel="stylesheet">
+</head>
+
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"></a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <header id="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="text-center"> Verification link is Send <small></small></h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+          <form  class="well" >
+            <h2>{{message1}}</h2>
+            <h3>{{message2}}</h3>
+            <h3>{{error}}</h3>
+            </div>            
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  {%if messages%}
+        <ul class="messages">
+          {%for m in messages%}
+          <div class="alert alert-success">{{m}}</div>
+          {%endfor%}
+        </ul>
+        {%endif%}
+
+
+  <footer id="footer">
+    <p></p>
+  </footer>
+
+  <!-- <script>
+    CKEDITOR.replace('editor1');
+  </script> -->
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="{% static 'js/bootstrap.min.js'%}"></script> -->
+</body>
+
+</html>

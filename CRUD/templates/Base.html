@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+      integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <title>Base</title>
+</head>
+{% block css%}
+<link rel="stylesheet" href="{% static 'style.css'%}" type="text/css"/>
+{% endblock %}
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+                  <a class="navbar-brand" href="{%url 'CRUD:add-hostel' %}">
+                    <i class="fas fa-home fa-1x" style="color:blue"></i>
+                    Home
+                  </a>
+                  <a class="navbar-brand" href="{%url 'CRUD:map' %}"><i class="fas fa-map" style="color:blue"></i>
+                    Map
+                  </a>
+                  <a class="navbar-brand" href="{%url 'CRUD:list-hostel' %}">
+                    View
+                  </a>
+                  <div class="d-flex align-items-row">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="{%url 'CRUD:search'%}">
+              {% csrf_token %}
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="srh">
+              <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="fas fa-search fa-1x"></i></button>
+              <!--<button class="btn"><i class="fa fa-user"></i></button>-->
+            </form>
+                    <a class="navbar-brand" style='text-decoration:none'>logged in as {{request.user}}</a>
+
+                    <a class="navbar-brand" href="/manageusers/">Users
+
+                  </a>
+                  <a class="navbar-brand" href="/logout/">
+                    <i class="fas fa-user fa-1x" style="color:blue"></i>
+                    Logout
+                  </a>
+
+            </div>
+      </div>
+      </div>
+      </div>
+
+      </nav>
+<div class="container">
+  <div class="form-group">
+
+    {%if messages%}
+    <ul class="messages">
+      {%for m in messages%}
+        <div class="alert alert-success">{{m}}</div>
+      {%endfor%}
+      </ul>
+    {%endif%}
+    </div>
+  </div>
+{% block body %}
+{% endblock %}
+</body>
+</html>

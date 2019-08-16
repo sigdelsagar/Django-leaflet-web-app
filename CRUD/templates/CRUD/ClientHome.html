@@ -1,0 +1,262 @@
+{%load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% block title %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client Area</title>
+  <!-- Bootstrap core CSS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{% static 'css/style.css'%}" rel="stylesheet">
+  {% endblock %}
+  {% block maplinker %}
+
+  {% endblock %}
+<!-- <script src="{% static 'js/userlocation.js'%}"></script> -->
+</head>
+
+<body>
+<script>
+  function showLocation(position) {
+        var setlong=position.coords.longitude;
+    console.log(setlong);
+    
+    var setlat=position.coords.latitude;
+    console.log(setlat);
+    var x = document.getElementById("long");
+    var y=document.getElementById("lat");
+    y.value=setlat;
+    x.value=setlong;  
+  }
+         function errorHandler(err) {
+            if(err.code == 1) {
+               console.log("Error: Access is denied!");
+            } else if( err.code == 2) {
+               console.log("Error: Position is unavailable!");
+            }
+         }
+         function getLocation(){
+            if(navigator.geolocation){
+               // timeout at 60000 milliseconds (60 seconds)
+               var options = {timeout:60000};
+               navigator.geolocation.getCurrentPosition
+               (showLocation, errorHandler, options);
+            } else{
+               alert("Sorry, browser does not support geolocation!");
+            }
+         }
+
+</script>
+  {% block header %}
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+         </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li ><a href="{%url 'CRUD:client-map'%}">Home</a></li>
+          <!-- <li ><a href="{%url 'CRUD:hostel-comments'%}">View Comments</a></li> -->
+          <!-- <li ><a href="{%url 'CRUD:hostel-comments'%}">Search hostel</a></li> -->
+          
+          <!-- <li> <a id="dmy">2019 Jan 10</a></li>
+          <li> <a id="time">12:39:00 PM</a></li> -->
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <!-- <li><a>Welcome, {{request.user}}</a></li> -->
+          <li><a href="{%url 'CRUD:logout' %}">Logout</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+  {% endblock %}
+
+  <header id="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-10">
+          {% block subheader%}
+          <h1><span aria-hidden="true"></span> <small>&nbsp;&nbsp;   Fill Hostel Form </small>
+          </h1>
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  {% block message%}
+  <div class="container">
+    <div class="form-group">
+
+      {%if messages%}
+      <ul class="messages">
+        {%for m in messages%}
+        <div class="alert alert-success">{{m}}</div>
+        {%endfor%}
+      </ul>
+      {%endif%}
+    </div>
+  </div>
+  {%endblock%}
+
+  <section id="main">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-9">
+            
+            {% block body%}
+            <!--edit view -->
+            <div class="col-md-9">
+              <div class="panel panel-default">
+                <div class="panel-heading main-color-bg">
+                  <h3 class="panel-title">Hostels</h3>
+                </div>
+                <div class="panel-body"> 
+                  <form method="POST" enctype="multipart/form-data">
+  
+                    {% csrf_token %}
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-3">
+                          {{ form.Hostel_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.Hostel_Address|as_crispy_field}}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          {{ form.Hostel_Ph_No|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.Hostel_Mobile_No|as_crispy_field }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          {{ form.Hostel_Price|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.Hostel_Estd|as_crispy_field }}
+                        </div>
+                      </div>
+                      
+                        <div class="row">
+                        <div class="col-md-3">
+                          {{ form.Hostel_type|as_crispy_field }}
+                        </div>
+                        </div>
+                    
+                        
+                        <div class="row">
+                          <div class="col-md-3">
+                            <!-- {{ form.Hostel_long  }} -->
+                            <label>Hostel longitude</label>
+                            <input name="Hostel_long" id="long" class="md-textarea form-control" type="text" /> 
+                          </div>
+                          <div class="col-md-3">
+                            <!-- {{ form.Hostel_lat  }}   -->
+                               <label>Hostel latitude</label>
+                            <input name="Hostel_lat" id="lat" class="md-textarea form-control" type="text" />       
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <h4><strong>Click the button to get your locations</strong></h4>
+                          </div>
+                      
+                    </div>
+                      <div class="row">
+                          <div class="col-md-3">
+                            <form>
+                          <input type='button' onclick="getLocation()" id="btn-id" value='try it'></input>
+                        </form>
+                          <p id="demo"></p>
+                        </div>
+                    </div>
+                          
+                     
+                        <div class="row">
+                          <div class="col-md-3">
+                            {{ form.image| as_crispy_field }}
+                          </div>
+                        </div>
+                         <div class="row">
+                        <div class="col-md-3">
+                          <h4><strong>Facilities</strong></h4>
+                          <table class="table" style={border:none;}>
+                            <tr>
+                              <td>{{ form.wifi|as_crispy_field }}</td>
+                              <td>{{ form.studyRoom|as_crispy_field }}</td>
+                              <td>{{ form.singleRoom|as_crispy_field }}</td>
+                              <td>{{ form.dormitory|as_crispy_field }}</td>
+                              <td>{{ form.lodging|as_crispy_field }}</td>
+                              <td>{{ form.laundary|as_crispy_field }}</td>                            
+                              <td>{{ form.medicalFacility|as_crispy_field }}</td>
+                            </tr>
+                          </table>
+                        </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-3">
+                            {{ form.about| as_crispy_field }}
+                          </div>
+                        </div>
+                      
+                      <button type="submit" >Send request</button>
+                  </form>
+                
+  
+                </div>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+                  
+                    
+          {% endblock %}
+
+          <!-- Latest Users -->
+          
+  {% block footer%}
+  <!-- <footer id="footer">
+    <p></p>
+  </footer> -->
+  {% endblock %}
+
+
+  <!-- Modals -->
+  {% block map%}
+  {% endblock%}
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'js/datetime.js'%}"></script>
+  
+</body>
+
+</html>

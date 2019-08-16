@@ -1,0 +1,149 @@
+{% extends 'main.html'%}
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+
+
+  {% block subheader %}
+  <h1><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Hostels <small>Manage Your Site</small>
+  </h1>
+  {% endblock %}
+
+
+
+
+
+
+  {% block breadcrumbs %}
+  <li><a href="{%url 'CRUD:add-hostel'%}">Dashboard</a></li>
+  <li class="active">Search results</li>
+  {% endblock %}
+
+
+  <section id="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          {% block overview %}
+          {% endblock %}
+          {% block latestUser %}
+          {% endblock %}
+
+
+          {% block body%}
+
+          <div class="col-md-13">
+            <!-- Website Overview -->
+            <div class="panel panel-default">
+              <div class="panel-heading main-color-bg">
+                <h3 class="panel-title">Search results
+
+
+
+                </h3>
+              </div>
+
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <form method="POST" action="{%url 'CRUD:search'%}">
+                      {% csrf_token %}
+                      <div class="input-group">
+                        <input type="text" class='form-control' placeholder="Search..." name="srh">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" type='submit'>Search</button>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <br>
+                {% block table%}
+                <table class="table table-striped table-hover">
+                  {% if match %}
+                  {% for each in match%}
+                  <tr scope="row">
+                    <td>Name </td>
+                    <td>{{ each.Hostel_name }}</td>
+                  </tr>
+                  <tr scope="row">
+                    <td>Address </td>
+                    <td>{{ each.Hostel_Address }}</td>
+                  </tr>
+                  <tr scope="row">
+                    <td>Phone No </td>
+                    <td>{{ each.Hostel_Ph_No }}</td>
+                  </tr>
+                  <tr scope="row">
+                    <td>Mobiel No </td>
+                    <td>{{ each.Hostel_Mobile_No }}</td>
+                  </tr>
+                  <tr scope="row">
+                    <td>Price </td>
+                    <td>{{ each.Hostel_Price }}</td>
+                  </tr>
+                  <tr scope="row">
+                    <td>Estd </td>
+                    <td>{{ each.Hostel_Estd }}</td>
+                  </tr>
+                  <tr scope="row">
+                    <td>About </td>
+                    <td>{{ each.Hostel_About }}</td>
+                  </tr>
+                  
+                  {%endfor%}
+                  {%endif%}
+                  {% if usr%}
+                  {%for e in usr%}
+                  <tr>
+                    <th>Id</th>
+                    <th>Email</th>
+                    <th>Joined</th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    {% if e.is_admin == False %}
+                    <td><input type="checkbox" name="acs" value={{e.id}}></td>
+
+                    <td>{{ e.id }}</td>
+                    <td>{{e.email}}</td>
+                    <td>{{e.timestamp}}</td>
+                    </td>
+                    {% endif %}
+                  </tr>
+                 
+                  {%endfor%}
+                  {% endif %}
+                </table>
+                {% endblock%}
+               
+                </form>
+              </div>
+              <tr>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- dialog box -->
+
+  {%endblock%}
+  <!-- Modals -->
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>

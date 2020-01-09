@@ -693,9 +693,9 @@ def nearest(request,h_long,h_lat):
     finallist=[]
     def calc(h_long,h_lat,longi,lati):
         from math import sin, cos, sqrt, atan2, radians
-        dlon = float(h_long) - float(longi)       
-        dlat = float(h_lat) - float(lati)
-        a = sin(dlat / 2)**2 + cos(float(lati)) * cos(float(h_lat)) * sin(dlon / 2)**2
+        dlon = h_long - longi       
+        dlat = h_lat - lati
+        a = sin(dlat / 2)**2 + cos(lati) * cos(h_lat) * sin(dlon / 2)**2
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
         R = 6373.0
         distance = R * c      
@@ -709,8 +709,9 @@ def nearest(request,h_long,h_lat):
         finallist.append(tupple)
         innerlist.remove(each.Hostel_long)
         innerlist.remove(each.Hostel_lat)
-        index.update({''+str(each.id):tupple})
+        index.update({'hostel'+str(k):each.Hostel_name})
         k=k+1
+  
     i=1
     
     for each in finallist:
@@ -718,39 +719,18 @@ def nearest(request,h_long,h_lat):
         long_lat.update({'hostel'+str(i):each})
         i=i+1
     j=1
-
-
-    import operator
-    for state,value in index.items():
-        dummy=[]
-       
-        for each in value:
-            dummy.append(each)
-            last_long=each
-        longi=dummy[0]
-        lati=dummy[1]
+    for state in long_lat.values():
+        longi=float(state[0])
+        lati=float(state[1])
         short=calc(h_long,h_lat,longi,lati)
-        print ("short",short)
-        print("stat",state)
-        shortest.update({''+str(state):short})
+        shortest.update({'hostel'+str(j):short})
         j=j+1
-    print (shortest)
-    print("min",sorted(shortest.items(), key=lambda x: x[1]))
-    
-    print(min(shortest, key=lambda k: shortest[k]))
+    nearestvalue=max(shortest)
 
-    # less=[]
-    # for state,value in shortest.items():
-    #         less.append(value)
-    # print()
-    # #nearestvalue=min(shortest)
-    print (min(shortest))
-    print (near)
-
-    nearesthostel=shortest.get(near)
+    nearesthostel=index.get(nearestvalue)
     from django.core import serializers
-    match=Hostel_info.objects.filter(id=near)
-    #print (match)
+    match=Hostel_info.objects.filter(Hostel_name=nearesthostel)
+    print (match)
     json_data = serializers.serialize("json",match)
     return render(request,'CRUD/clientpage.html',{'json':json_data})
 

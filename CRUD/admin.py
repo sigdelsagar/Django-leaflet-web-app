@@ -25,33 +25,18 @@ class Custom_Request(admin.ModelAdmin):
         'Hostel_Price',
         'Actions',
     )
-    # class Meta:
-    #     # model = Hostel_Request
-    #     list_display = (
-    #         'Hostel_name',
-    #         'Hostel_Price',
-    #         # 'Actions',
-    #     )
-    #     readonly_fields = ["hostel_image", ]list_display = ('username', 'email', 'is_active')
-
-    # def hostel_image(self, obj):
-    #     return format_html('<img src="{url}" width="{width}" height={height} />'.format(
-    #         url=obj.image.url,
-    #         width=obj.image.width,
-    #         height=obj.image.height,
-    #     )
-    #     )
 
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
             path('accept/<int:pk>', self.set_accept, name='hostel-accept'),
             path('reject/<int:pk>', self.set_reject, name='hostel-reject'),
+
         ]
         return my_urls + urls
 
-    # def has_add_permission(self, request):
-    #     return False
+    def newview(self, obj):
+        return True
 
     def Actions(self, obj):
         return format_html(

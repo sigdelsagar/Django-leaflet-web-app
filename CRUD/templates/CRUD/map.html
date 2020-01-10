@@ -2,112 +2,102 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    {% block maplinker %}
-    <script
-      src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-      integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-      crossorigin=""
-    ></script>
 
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-      crossorigin=""
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
-    />
+<head>
+  {% block maplinker %}
+  <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
 
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
-    />
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 
-    <style>
-      body {
-        overflow-x: hidden;
-        overflow-y: scroll;
-      }
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
-      #mapid {
-        height: 100%;
-        width: 100%;
-      }
-    </style>
-    {% endblock %}
-  </head>
+  <style>
+    body {
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
 
-  <body>
-    {% block body %} {% endblock %} {% block subheader%}
-    <h1>
-      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Mapview
-      <small>Manage Your Site</small>
-    </h1>
-    {% endblock %} {% block breadcrumbs %}
-    <li><a href="{%url 'CRUD:add-hostel'%}">Dashboard</a></li>
-    <li>Mapview</li>
-    {% endblock %} {% block footer%} {% endblock %} {% block overview %}
+    #mapid {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  {% endblock %}
+</head>
 
-    <div class="panel-heading main-color-bg">
-      <h3 class="panel-title">Map Overview</h3>
-    </div>
-    <div style="height:600px;">
-      <div id="mapid"></div>
-    </div>
+<body>
+  {% block body %} {% endblock %} {% block subheader%}
+  <h1>
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Mapview
+    <small>Manage Your Site</small>
+  </h1>
+  {% endblock %} {% block breadcrumbs %}
+  <li><a href="{%url 'CRUD:add-hostel'%}">Dashboard</a></li>
+  <li>Mapview</li>
+  {% endblock %} {% block footer%} {% endblock %} {% block overview %}
 
-    <script>
-                       var data = {{ json| safe }}
+  <div class="panel-heading main-color-bg">
+    <h3 class="panel-title">Map Overview</h3>
+  </div>
+  <div style="height:600px;">
+    <div id="mapid"></div>
+  </div>
 
-                       var count = Object.keys(data).length;
+  <script>
+    var data = {{ json| safe }}
 
-                       var mymap = L.map('mapid').setView([27.71, 85.32], zoom_start = 13);
-                       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29iZXkiLCJhIjoiY2p2bDlsOGluMHRuOTQ5cWxhd2U2YzNxdyJ9.dWDzlfG7d03FvSFWGKOZJA', {
-                       	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                       	maxZoom: 18,
-                       	id: 'mapbox.streets',
-                       	accessToken: 'your.mapbox.access.token'
-                       }).addTo(mymap);
-              var customOptions =
-                 {
-                 'maxWidth': '500',
+    var count = Object.keys(data).length;
 
-                 }
+    var mymap = L.map('mapid').setView([27.71, 85.32], zoom_start = 13);
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29iZXkiLCJhIjoiY2p2bDlsOGluMHRuOTQ5cWxhd2U2YzNxdyJ9.dWDzlfG7d03FvSFWGKOZJA', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox.streets',
+      accessToken: 'your.mapbox.access.token'
+    }).addTo(mymap);
+    var customOptions =
+    {
+      'maxWidth': '500',
 
-                       for (i = 0; i < count; i++) {
-                       	var lat = data[i]['fields'].Hostel_lat;
-                       	var long = data[i]['fields'].Hostel_long;
-                       	var name = data[i]['fields'].Hostel_name;
-                       	var addr = data[i]['fields'].Hostel_Address;
-            	  var price = data[i]['fields'].Hostel_Price;
-            	  var phno = data[i]['fields'].Hostel_Ph_No;
-            	  var mobno = data[i]['fields'].Hostel_Mobile_No;
-                       	var marker = L.marker([lat, long]).addTo(mymap);
-                       	//var popup = L.popup().setLatLng([lat, long]).setContent(name).openOn(mymap);
-                       	var show=marker.bindPopup(name).closePopup();
-            	  marker.bindTooltip("Name:"+name+"<br />Address:"+addr+"<br/>Price:Rs"+price+
-            "<br/>Contacts:"+phno+",<br/>  "+mobno).closeTooltip();
-                     marker.on('mouseover',function(e){
-                     	this.openPopup();
-            	this.closeTooltip();
-                     });
-                 marker.on('mouseout', function (e) {
-                           this.closePopup();
-            	  this.closeTooltip();
-                       });
+    }
 
-                     marker.on('click', function (e) {
-            //    marker.bindTooltip(lat).openTooltip();
-            // marker.bindTooltip("Name:"+name+"<br />Address:"+addr+"<br/>Price:Rs"+price+
-            // "<br/>Contacts:"+phno+",<br/>  "+mobno).openTooltip();
-              alert('clicked')
-                       });
-                  		}
-       
+    for (i = 0; i < count; i++) {
+      var lat = data[i]['fields'].Hostel_lat;
+      var long = data[i]['fields'].Hostel_long;
+      var name = data[i]['fields'].Hostel_name;
+      var addr = data[i]['fields'].Hostel_Address;
+      var price = data[i]['fields'].Hostel_Price;
+      var phno = data[i]['fields'].Hostel_Ph_No;
+      var mobno = data[i]['fields'].Hostel_Mobile_No;
+      var marker = L.marker([lat, long]).addTo(mymap);
+      //var popup = L.popup().setLatLng([lat, long]).setContent(name).openOn(mymap);
+      var show = marker.bindPopup(name).closePopup();
+      marker.bindTooltip("Name:" + name + "<br />Address:" + addr + "<br/>Price:Rs" + price +
+        "<br/>Contacts:" + phno + ",<br/>  " + mobno).closeTooltip();
+      marker.on('mouseover', function (e) {
+        this.openPopup();
+        this.closeTooltip();
+      });
+      marker.on('mouseout', function (e) {
+        this.closePopup();
+        this.closeTooltip();
+      });
+
+      marker.on('click', function (e) {
+        //    marker.bindTooltip(lat).openTooltip();
+        // marker.bindTooltip("Name:"+name+"<br />Address:"+addr+"<br/>Price:Rs"+price+
+        // "<br/>Contacts:"+phno+",<br/>  "+mobno).openTooltip();
+        // alert('clicked')
+      });
+    }
+
 
                        	//  var cont=L.Routing.control({
                        	//  	waypoints: [
@@ -116,7 +106,8 @@
                        	//  	]
                         //   }).addTo(mymap);
                         //   cont.hide();
-    </script>
-  </body>
-  {%endblock%}
+  </script>
+</body>
+{%endblock%}
+
 </html>

@@ -18,12 +18,13 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.urlpatterns import format_suffix_patterns
-from CRUD import views
+from CRUD import views, models
 from django.views.generic import RedirectView
-
+from django.core import serializers
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls,
+         {'extra_context': {'json': serializers.serialize("json", models.Hostel_info.objects.all())}}),
     path('', views.index, name='index'),
     path("hostel/", include("CRUD.urls")),
     path("account/", include("accounts.urls")),

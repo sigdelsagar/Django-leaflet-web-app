@@ -1,111 +1,183 @@
+{% load static %}
+
 <head>
-    {% block maplinker %}
-    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-        crossorigin=""></script>
+  {% block maplinker %}
+  <script
+    src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""
+  ></script>
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"
+  ></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-        crossorigin="" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""
+  />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+  />
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+  <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" /> -->
+  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+  <!-- <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script> -->
 
-    {% endblock %}
+  {% endblock %}
 </head>
 <style>
-    body {
-        overflow-x: hidden;
-        overflow-y: scroll;
-    }
+  body {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 
-    #mapid {
-        height: 100%;
-        width: 100%;
-    }
+  #mapid {
+    height: 100%;
+    width: 100%;
+  }
 </style>
 
-
 <body>
+  {% block map %}
+  <div class="box box-primary box-solid app-box">
+    <div class="box-header with-border">
+      <h3 class="box-title">
+        <a href="#" class="section" title="Map in the application">Map</a>
+      </h3>
 
-
-
-    <div class="box box-primary box-solid app-box">
-        <div class="box-header with-border">
-            <h3 class="box-title"><a href="#" class="section" title="Map in the application">Map</a>
-            </h3>
-
-            <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-            </div>
-            <!-- /.box-tools -->
+      <div class="box-tools pull-right">
+        <div class="row">
+          <div class="col-md-3">
+            <button class="btn btn-success" id="male" type="submit" url="jpt">
+              Male
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-success" id="female">Female</button>
+          </div>
+          <div class="pull-right">
+            <button
+              type="button"
+              class="btn btn-box-tool"
+              data-widget="collapse"
+            >
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
         </div>
-        <div class="box-body">
-            <!-- <div class="col-md-4 col-sm-6 model-box"> -->
-            <div style="height:350px;">
-                <div id="mapid"></div>
-            </div>
-            <!-- </div> -->
-        </div>
+      </div>
+      <!-- /.box-tools -->
     </div>
+    <div class="box-body">
+      <!-- <div class="col-md-4 col-sm-6 model-box"> -->
+      <div style="height:350px;">
+        <div id="mapid"></div>
+      </div>
+
+      <!-- </div> -->
+    </div>
+  </div>
+  {% endblock %}
 </body>
 <script>
-    var data = {{ json| safe }}
-
-    var count = Object.keys(data).length;
-
-    var mymap = L.map('mapid').setView([27.71, 85.32], zoom_start = 13);
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29iZXkiLCJhIjoiY2p2bDlsOGluMHRuOTQ5cWxhd2U2YzNxdyJ9.dWDzlfG7d03FvSFWGKOZJA', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'your.mapbox.access.token'
-    }).addTo(mymap);
-    var customOptions =
+  var markers;
+  var mymap = L.map("mapid").setView([27.71, 85.32], (zoom_start = 13));
+  markers = new L.LayerGroup().addTo(mymap);
+  L.tileLayer(
+    "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29iZXkiLCJhIjoiY2p2bDlsOGluMHRuOTQ5cWxhd2U2YzNxdyJ9.dWDzlfG7d03FvSFWGKOZJA",
     {
-        'maxWidth': '500',
-
+      attribution:
+        'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: "mapbox.streets",
+      accessToken: "your.mapbox.access.token"
     }
+  ).addTo(mymap);
+  //var customOptions = {
+  //  maxWidth: "500"
+  //};
+  //---------------Load Male/Femlae hostel onClick
+  $(".btn-success").click(function() {
+    var mF, url;
+    mF = $(this).attr("id");
+    url = $(this).attr("url");
 
-    for (i = 0; i < count; i++) {
-        var lat = data[i]['fields'].Hostel_lat;
-        var long = data[i]['fields'].Hostel_long;
-        var name = data[i]['fields'].Hostel_name;
-        var addr = data[i]['fields'].Hostel_Address;
-        var price = data[i]['fields'].Hostel_Price;
-        var phno = data[i]['fields'].Hostel_Ph_No;
-        var mobno = data[i]['fields'].Hostel_Mobile_No;
-        var marker = L.marker([lat, long]).addTo(mymap);
-        //var popup = L.popup().setLatLng([lat, long]).setContent(name).openOn(mymap);
-        var show = marker.bindPopup(name).closePopup();
-        marker.bindTooltip("Name:" + name + "<br />Address:" + addr + "<br/>Price:Rs" + price +
-            "<br/>Contacts:" + phno + ",<br/>  " + mobno).closeTooltip();
-        marker.on('mouseover', function (e) {
+    console.log(url);
+    $.ajax({
+      type: "GET",
+      url: "{% url 'admin:male-Female'%}",
+
+      dataType: "json",
+
+      data: {
+        gender: mF
+      },
+      success: function(data) {
+        var json_data = $.parseJSON(data.json);
+
+        var data = json_data;
+        var count = Object.keys(data).length;
+        markers.clearLayers();
+        for (i = 0; i < count; i++) {
+          var lat = data[i]["fields"].Hostel_lat;
+          var long = data[i]["fields"].Hostel_long;
+          var name = data[i]["fields"].Hostel_name;
+          var addr = data[i]["fields"].Hostel_Address;
+          var price = data[i]["fields"].Hostel_Price;
+          var phno = data[i]["fields"].Hostel_Ph_No;
+          var mobno = data[i]["fields"].Hostel_Mobile_No;
+          let marker = L.marker([lat, long]).addTo(markers);
+          //var popup = L.popup().setLatLng([lat, long]).setContent(name).openOn(mymap);
+          var show = marker.bindPopup(name).closePopup();
+          marker
+            .bindTooltip(
+              "Name:" +
+                name +
+                "<br />Address:" +
+                addr +
+                "<br/>Price:Rs" +
+                price +
+                "<br/>Contacts:" +
+                phno +
+                ",<br/>  " +
+                mobno
+            )
+            .closeTooltip();
+          marker.on("mouseover", function(e) {
             this.openPopup();
             this.closeTooltip();
-        });
-        marker.on('mouseout', function (e) {
+          });
+          marker.on("mouseout", function(e) {
             this.closePopup();
             this.closeTooltip();
-        });
-
-        marker.on('click', function (e) {
+          });
+          marker.on("click", function(e) {
             //    marker.bindTooltip(lat).openTooltip();
             // marker.bindTooltip("Name:"+name+"<br />Address:"+addr+"<br/>Price:Rs"+price+
             // "<br/>Contacts:"+phno+",<br/>  "+mobno).openTooltip();
             // alert('clicked')
-        });
-    }
+          });
+        }
+      },
+      error: function(xhr, status, error_data) {
+        console.log("error");
+        console.log(status);
+        console.log(error_data);
+      }
+    });
+  });
+  //-----------------------------------------------------
 
-
-                               //  var cont=L.Routing.control({
-                               //  	waypoints: [
-                               //  		L.latLng(27.71, 85.32),
-                               //  		L.latLng(27.69, 85.30)
-                               //  	]
-                            //   }).addTo(mymap);
-                            //   cont.hide();
+  //  var cont=L.Routing.control({
+  //  	waypoints: [
+  //  		L.latLng(27.71, 85.32),
+  //  		L.latLng(27.69, 85.30)
+  //  	]
+  //   }).addTo(mymap);
+  //   cont.hide();
 </script>

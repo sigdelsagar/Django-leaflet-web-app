@@ -1,0 +1,151 @@
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+</head>
+
+<body>
+  <div class="box box-primary box-solid app-box">
+    <div class="box-header with-border">
+      <h3 class="box-title">
+        <a href="#" class="section" title="Map in the application">Graph</a>
+      </h3>
+
+      <div class="box-tools pull-right">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-6">
+            <button
+              type="button"
+              class="btn btn-box-tool"
+              data-widget="collapse"
+            >
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-tools -->
+    </div>
+    <div class="box-body">
+      <!-- <div class="col-md-4 col-sm-6 model-box"> -->
+      <div class="col-md-6">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="myChart2" width="400" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  var ctx = document.getElementById("myChart").getContext("2d");
+  var data2={{ bargrap |safe }};
+  console.log(data2);
+  let data3=data2['data'];
+  console.log(data3);
+  let label3=data2['labels'];
+  var linecolour2='#3cba6f';
+  var backGroundColor=[];
+  var incrementColor = function (color, step) {
+    var colorToInt = parseInt(color.substr(1), 16),
+        nstep = parseInt(step);
+    if (!isNaN(colorToInt) && !isNaN(nstep)) {
+        colorToInt += nstep;
+        var ncolor = colorToInt.toString(16);
+        ncolor = '#' + (new Array(7 - ncolor.length).join(0)) + ncolor;
+        if (/^#[0-9a-f]{6}$/i.test(ncolor)) {
+            return ncolor;
+        }
+    }
+    return color;
+  }
+  Object.keys(data2).forEach(function(key) {
+    backGroundColor.push(linecolour2) ;
+    //console.table('Key : ' + key + ', Value : ' + data[key])
+    linecolour2=incrementColor(linecolour2,50000);
+  })
+  console.log(backGroundColor);
+
+
+  var myChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: label3,
+      datasets: [
+        {
+          label: "Total Number of Likes per Hostel",
+          data: data3,
+          backgroundColor:backGroundColor,
+          /*backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)"
+          ],
+
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)"
+          ],*/
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
+    }
+  });
+
+  var data = {{pass_rate | safe}};
+
+
+  var count = Object.keys(data).length;
+  console.log('totaldaata');
+  console.log(data);
+  var ctx = document.getElementById("myChart2").getContext("2d");
+
+  let passYear={{labels}},hostel_name=[];
+  let dataSet=[];
+  var linecolour='#3cba9f'
+
+  Object.keys(data).forEach(function(key) {
+    data[key].borderColor= linecolour;
+    data[key].fill=false;
+
+    dataSet.push(data[key]);
+    //console.table('Key : ' + key + ', Value : ' + data[key])
+    linecolour=incrementColor(linecolour,50000);
+  })
+
+
+  console.log(data)
+  var myChart2 = new Chart(ctx, {
+    type: "line",
+    data: {
+
+      labels: passYear,
+      datasets: dataSet,
+
+    },
+    options: {
+      title: {
+        display: true,
+        text: "Students pass rate: 1,Jan,2014-30,Dec,2018"
+      }
+    }
+  });
+</script>

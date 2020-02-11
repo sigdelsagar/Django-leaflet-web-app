@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_adminlte',
     'django_adminlte_theme',
     'CRUD.apps.CrudConfig',
+    'Student',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,9 +54,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'django.contrib.sites',
     'debug_toolbar',
+    'django_extensions',
     'rest_framework',
     'crispy_forms',
     'accounts',
+
 ]
 
 
@@ -103,6 +106,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}
+
+DEBUG_TOOLBAR_CONFIG = {
+    'DISABLE_PANELS': [
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ],
+    'SHOW_TEMPLATE_CONTEXT': True,
+    "INTERCEPT_REDIRECTS": True,
 }
 
 
@@ -160,6 +171,7 @@ MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+print(STATICFILES_DIRS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")

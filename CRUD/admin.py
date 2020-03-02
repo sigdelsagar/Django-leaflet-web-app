@@ -10,6 +10,9 @@ from django.contrib.admin.sites import AdminSite
 from django.views.decorators.cache import never_cache
 from django.core import serializers   
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class HostelInline(admin.TabularInline):
     model = Hostel_comment
@@ -166,14 +169,27 @@ class Custom_info(admin.ModelAdmin):
         elif (obj.Hostel_type == 'female'):
             return format_html('<i class="fa fa-venus"  style="color:#E75480"></i>')
 
+class Custom_Token(admin.ModelAdmin):
+    # change_list_template = 'admin/CRUD/Hostel_Request/change_form.html'
+    list_display = (
+        'key',
+        'user',
+        'created',
+    )
+
+
+
+
 
 AdminSite.site_header = "Hostel Admin"
 AdminSite.site_title = "Hostel aaaaaAdmin"
 AdminSite.index_title = "Welcome to Hostel Admin Portal"
 
-
+from rest_framework.authtoken.models import Token
 # admin.site.register(Hostel_info, Custom_info)
 custom_admin_site.register(Hostel_Request, Custom_Request)
 custom_admin_site.register(Request_Image)
 custom_admin_site.register(Image, Custom_Image)
 custom_admin_site.register(Hostel_comment)
+custom_admin_site.register(Token,Custom_Token)
+custom_admin_site.register(User)

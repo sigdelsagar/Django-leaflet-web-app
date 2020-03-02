@@ -55,12 +55,44 @@ INSTALLED_APPS = [
     # 'django.contrib.sites',
     'debug_toolbar',
     'django_extensions',
+    'rest_framework_swagger',
     'rest_framework',
+    'rest_framework.authtoken',
+    'django_filters',
     'crispy_forms',
     'accounts',
+    'Api',
 
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.JSONParser',
+    ],
+}
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        },
+        'basic': {
+            'type': 'basic'
+        }
+    },
+    'SHOW_REQUEST_HEADERS': True,
+}
+
+LOGIN_URL = 'rest_framework:login'
+LOGOUT_URL = 'rest_framework:logout'
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -112,8 +144,8 @@ DEBUG_TOOLBAR_CONFIG = {
     'DISABLE_PANELS': [
         'debug_toolbar.panels.redirects.RedirectsPanel',
     ],
+
     'SHOW_TEMPLATE_CONTEXT': True,
-    "INTERCEPT_REDIRECTS": True,
 }
 
 
@@ -160,6 +192,16 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# celery settings
+
+CELERY_BROKER_URL = 'amqp://cjstdqjb:hqkvfsirKA5gllR4DiKWDrscXgDrxWym@fox.rmq.cloudamqp.com/cjstdqjb'
+
+#: Only add pickle to this list if your broker is secured
+#: from unwanted access (see userguide/security.html)
+CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+CELERY_TASK_SERIALIZER = 'json'
 
 
 # Static files (CSS, JavaScript, Images)

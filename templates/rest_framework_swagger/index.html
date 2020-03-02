@@ -1,0 +1,21 @@
+{% extends "rest_framework_swagger/index.html" %} {% block extra_nav %}
+<input type="text" id="auth_token" placeholder="Auth Token" />
+<input class="submit" type="submit" value="Submit" data-sw-translate="" />
+{% endblock %} {% block extra_scripts %}
+<script>
+  var element = document.querySelector("#api_selector");
+  element.addEventListener("submit", function(event) {
+    event.preventDefault();
+    var token = $("#auth_token").val();
+    window.swaggerUi.api.clientAuthorizations.add(
+      "Authorization",
+      new window.SwaggerClient.ApiKeyAuthorization(
+        "Authorization",
+        token,
+        "header"
+      )
+    );
+    alert("authorization added: " + token);
+  });
+</script>
+{% endblock %}

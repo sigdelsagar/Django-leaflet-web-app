@@ -6,8 +6,8 @@ app_name = 'accounts'
 
 urlpatterns = [
 
-    path('api-register/', UserRegisterView.as_view()),
-    path('api-login/', UserLoginAPIView.as_view()),
+    # path('api-register/', UserRegisterView.as_view()),
+    # path('api-login/', UserLoginAPIView.as_view()),
 
 
 ]

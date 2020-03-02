@@ -21,19 +21,20 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from CRUD import views, models
 from CRUD.admin import custom_admin_site
 from django.views.generic import RedirectView
+from rest_framework import routers
 
 #
 urlpatterns = [
     path('admin/', custom_admin_site.urls),
-    path('', views.index, name='index'),
+    # path('', views.index, name='index'),
     path("hostel/", include("CRUD.urls")),
     path("account/", include("accounts.urls")),
-    path('api-hostel/', views.Api_Hostel.as_view()),
-    path('api-comment/', views.Api_Comment.as_view()),
-    path('api-comment-crud/<int:id>', views.Api_Crud.as_view()),
-    path('api-hostel-add/', views.Api_Hostel_Add.as_view()),
-    path('api-image/', views.Api_Image.as_view()),
-
+    # path('api-hostel/', views.Api_Hostel.as_view()),
+    # path('api-comment/', views.Api_Comment.as_view()),
+    # path('api-comment-crud/<int:id>', views.Api_Crud.as_view()),
+    # path('api-hostel-add/', views.Api_Hostel_Add.as_view()),
+    # path('api-image/', views.Api_Image.as_view()),
+    path("", include("Api.urls"))
 ]
 if settings.DEBUG:
     import debug_toolbar
